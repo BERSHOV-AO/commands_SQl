@@ -1,0 +1,110 @@
+вложенный запрос
+выбрать name, age, company у которого зарплата выше среднего (select avg(salary) from netology2.employees);
+select name, age, company from netology2.employees
+where salary > (select avg(salary) from netology2.employees);
+
+//-----------------------------------------------------------------------------------------------------
+Вычислить сотрудников возраст которых выше среднего
+select name, age, company, salary from netology2.employees
+where age > (select avg(age) from netology2.employees);
+
+//-----------------------------------------------------------------------------------------------------
+count(*) - принято писать count(*) в тандеме со звездочкой
+
+выборка по счету(количеству) сотрудников из компаний 
+select company, count(*) from netology2.employees
+group by company; - производим группировку по компании 
+
+//-----------------------------------------------------------------------------------------------------
+having - для фильтрации
+В нашу выборку заходят только те компании численность сотрудников которых большее одного.
+select company, count(*) from netology2.employees
+group by company
+having count(*) > 1;
+
+//-----------------------------------------------------------------------------------------------------
+выборка, + сотрудники с зарплатой больше 1000
+select company, count(*) from netology2.employees
+where salary > 1000
+group by company;
+
+//-----------------------------------------------------------------------------------------------------
+та же выборка, только еще компания не должна равняться 'Yandex';
+select company, count(*) from netology2.employees
+where salary > 1000
+group by company
+having company != 'Yandex';
+
+//-----------------------------------------------------------------------------------------------------
+alter colonum = изменение типа колонки
+alter table netology2.employees add column test int; создали int
+alter table netology2.employees alter column test type varchar(50); изменили на varchar
+
+//-----------------------------------------------------------------------------------------------------
+хотим присоединить таблички 
+
+select* from netology2.employees e;
+update netology2.employees set room_id = 1
+where room_id = 200;
+
+update netology2.employees set room_id = 2
+where room_id = 201;
+
+update netology2.employees set room_id = 3
+where room_id = 202;
+
+update netology2.employees set room_id = 1
+where room_id = 200;
+
+//-----------join-----------
+select* from netology2.employees e 
+join netology2.rooms r on e.room_id = r.id;
+
+
+//-----------right join----------- показать + пустующие комнаты
+select* from netology2.employees e 
+right join netology2.rooms r on e.room_id = r.id;
+
+
+//-----------right join----------- только пустующие комнаты
+select* from netology2.employees e 
+right join netology2.rooms r on e.room_id = r.id
+where e.id is null;
+
+//-----------full join ---------- вывести всех работников которые не сидят в комнате и вывести все свободные комнаты 
+select* from netology2.employees e 
+full join netology2.rooms r on e.room_id = r.id
+where e.id is null or r.id is null;
+
+//--------------full join------------- вывести всех сотрудников, все комнаты.
+select* from netology2.employees e 
+full join netology2.rooms r on e.room_id = r.id;
+
+//-----------left join----------- показать только того кто работает без комнаты
+select* from netology2.employees e 
+left join netology2.rooms r on e.room_id = r.id
+where r.id is null;
+
+//-----------left join----------- всех сотрудников с местом и без места
+select* from netology2.employees e 
+left join netology2.rooms r on e.room_id = r.id;
+
+Index
+
+//--------------- SUM --------------------
+// сумма всех возрастов программистов
+select sum(age) from netology2.employees e;
+
+//---------------MIN ---------------------
+select min(age) from netology2.employees e;
+
+//---------------MAX----------------------
+select max(age) from netology2.employees e;
+
+//-------------max + name------------------
+select name, age from netology2.employees e
+where age = (select max(age) from netology2.employees e2); 
+
+//выборка максимального возраста в компаниях
+select company, max(age) from netology2.employees e
+group by company;
